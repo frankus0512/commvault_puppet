@@ -7,3 +7,4 @@ Instructions on how to use this module:
  - This module will only install the FS iDA and MA
  - Vagrantfile MUST pass the hostname and any interface other than the private_internal
  - You may still mount the ISO at any later time to install additional iDA's.
+ - cv_fsida.xml is a parameter file for the silent installation and will only install a FS iDA by default (more information on how to generate custom parameter file such as databases can be found on http://documentation.commvault.com/commvault/v10/article?p=deployment/install/unix_silent.htm#Install_Using_XML_File)
