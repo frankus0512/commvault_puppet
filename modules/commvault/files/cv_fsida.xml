@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<CVInstallManager_ClientSetup Focus="New" LocaleID="0" Operationtype="0" RemoteClient="1" requestFlags="" requestType="1">
+<CommServeInfo>
+<CommserveHostInfo clientName="" hostName="">
+</CommserveHostInfo>
+</CommServeInfo>
+<clientComposition>
+<clientInfo>
+<client clientPassword="" cvdPort="" evmgrcPort="" installDirectory="">
+<clientEntity clientName="" hostName="">
+</clientEntity>
+<jobResulsDir path="/opt">
+</jobResulsDir>
+<osInfo PlatformType="X64" SubType="Linux" Type="Unix" Version="glibc2.6">
+<OsDisplayInfo OSBuild="2.6.32-431.20.3.el6.x86_64" OSName="Linux" ProcessorType="x86_64">
+</OsDisplayInfo>
+</osInfo>
+<versionInfo GalaxyBuildNumber="BUILD116">
+<GalaxyRelease ReleaseString="10.0">
+</GalaxyRelease>
+</versionInfo>
+</client>
+<clientProps BinarySetID="18" CPUCount="" IsVirtualClient="0" byteOrder="" logFilesLocation="/var/log">
+</clientProps>
+</clientInfo>
+<components>
+<commonInfo globalFilters="2">
+</commonInfo>
+<componentInfo ComponentId="1002" ComponentName="File System Core" clientSidePackage="1" consumeLicense="1" osType="Unix">
+</componentInfo>
+<componentInfo ComponentId="1003" ComponentName="Base0 Client" clientSidePackage="1" consumeLicense="1" osType="Unix">
+</componentInfo>
+<componentInfo ComponentId="1112" ComponentName="Data Classification Enabler" clientSidePackage="1" consumeLicense="0" osType="Unix">
+</componentInfo>
+<componentInfo ComponentId="1113" ComponentName="File System Filter Driver" clientSidePackage="1" consumeLicense="0" osType="Unix">
+</componentInfo>
+<componentInfo ComponentId="1101" ComponentName="File System" clientSidePackage="1" consumeLicense="1" osType="Unix">
+</componentInfo>
+<componentInfo ComponentId="1301" ComponentName="MediaAgent" clientSidePackage="1" consumeLicense="1" osType="Unix">
+</componentInfo>
+<dataClassification dcCacheLocation="/cvdccache">
+</dataClassification>
+<fileSystem configureForLaptopBackups="0">
+</fileSystem>
+<mediaAgent>
+<indexCacheDirectory path="/simpana/MediaAgent/IndexCache">
+</indexCacheDirectory>
+</mediaAgent>
+</components>
+</clientComposition>
+<installFlags decoupledInstall="1" installLatestServicePack="no" unixGroupAccess="7" unixOtherAccess="7">
+</installFlags>
+</CVInstallManager_ClientSetup>
