@@ -1,16 +1,27 @@
 # -*- mode: ruby -*-
-# vi: set ft=ruby :
+# vi:set ts=2 sw=2 ft=ruby et:
+
+# Setting any custom variables
+$newhostname = "test-linux"
+$puppettmp = "/tmp/puppet"
+$puppetmanifests = "#{$puppettmp}/manifests"
+$puppetmodules = "#{$puppettmp}/modules"
+$script = <<SCRIPT
+newhostname=#{$newhostname}
+newipaddr=`ifconfig eth0 | grep 'inet' | grep -v 'inet6' | awk -F "addr:" '{ print $2 }' | awk '{ print $1 }'`
+sed -i 's/^HOSTNAME=.*$/HOSTNAME='$newhostname'/' /etc/sysconfig/network
+echo -e "$newipaddr\t$newhostname" >> /etc/hosts
+hostname $newhostname
+/etc/init.d/network restart
+mkdir -p #{$puppettmp}
+cd #{$puppettmp}
+tar xvfz /home/vagrant/puppet.tar.gz
+sed -i 's/CHANGEMEUNAME-R/'`uname -r`'/' #{$puppetmodules}/commvault/files/install.xml
+SCRIPT
+
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
-
-# Custom scripts
-$network_interface = "eth1"
-$update_ip_address = <<SCRIPT
-  my_ip_address=`/sbin/ifconfig #{$network_interface} | grep 'inet addr' | awk -F' ' '{print $2}' | awk -F':' '{print $2}'`
-  my_short_hostname=`/bin/hostname -s`
-  echo -e "$my_ip_address\\t$my_short_hostname-#{$network_interface}" >> /etc/hosts
-SCRIPT
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # All Vagrant configuration is done here. The most common configuration
@@ -19,7 +30,25 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "centos65-x86_64"
-  config.vm.hostname = "centos"
+  config.vm.provider :esxi do |esxi|
+    esxi.name = "#{$newhostname}"
+    esxi.host = "192.168.1.200"
+    esxi.srcds = "datastore2"
+    esxi.dstds = "datastore1"
+    esxi.user = "root"
+  end
+  config.vm.provision "file", source: "puppet.tar.gz", destination: "puppet.tar.gz"
+  config.vm.provision "file", source: "linux-x86_64.tar.gz", destination: "linux-x86_64.tar.gz"
+  config.vm.provision "shell", inline: $script
+ 
+  config.vm.provision "puppet" do |puppet|
+    puppet.manifests_path = ["vm", "#{$puppetmanifests}"]
+    puppet.options = "--modulepath #{$puppetmodules}"
+    puppet.facter = {
+      "tmpdir" => "#{$puppettmp}",
+      "csname" => "192.168.1.100"
+    }
+  end
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -38,7 +67,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
   # your network.
-  config.vm.network "public_network"
+  # config.vm.network "public_network"
 
   # If true, then any SSH connections made will enable agent forwarding.
   # Default value: false
@@ -54,18 +83,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
-  config.vm.provider "virtualbox" do |vb|
+  # config.vm.provider "virtualbox" do |vb|
   #   # Don't boot with headless mode
   #   vb.gui = true
   #
   #   # Use VBoxManage to customize the VM. For example to change memory:
   #   vb.customize ["modifyvm", :id, "--memory", "1024"]
-    vb.customize ["modifyvm", :id, "--name", "centos", "--memory", "512"]
-  end
-
-  config.vbguest.auto_update = false
-
-  config.vm.provision "shell", inline: $update_ip_address
+  #  vb.customize ["modifyvm", :id, "--name", "centos", "--memory", "512"]
+  # end
 
   #
   # View the documentation for the provider you're using for more
@@ -92,14 +117,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # You will need to create the manifests directory and a manifest in
   # the file default.pp in the manifests_path directory.
   #
-  config.vm.provision "puppet" do |puppet|
-    puppet.module_path = "modules"
-    puppet.facter = {
-      "hostname" => "centos",
-      "vif"      => "eth1"
-    }
-  #  puppet.options = "--verbose --debug"
-  end
 
   # Enable provisioning with chef solo, specifying a cookbooks path, roles
   # path, and data_bags path (all relative to this Vagrantfile), and adding

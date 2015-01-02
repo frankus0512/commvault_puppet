@@ -12,7 +12,7 @@
 <jobResulsDir path="/opt">
 </jobResulsDir>
 <osInfo PlatformType="X64" SubType="Linux" Type="Unix" Version="glibc2.6">
-<OsDisplayInfo OSBuild="2.6.32-431.20.3.el6.x86_64" OSName="Linux" ProcessorType="x86_64">
+<OsDisplayInfo OSBuild="CHANGEMEUNAME-R" OSName="Linux" ProcessorType="x86_64">
 </OsDisplayInfo>
 </osInfo>
 <versionInfo GalaxyBuildNumber="BUILD116">
